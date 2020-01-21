@@ -16,25 +16,30 @@ class The301 extends Game {
 
     shoot(player, tabscore, game) {
         let text
-
         let score = tabscore[0] * tabscore[1]
-        console.log("Vous faite " + score + " points !")
 
+        console.log(score + " points !")
 
-        if (player.score - score > 1)
+        if (tabscore[1] == 2 && player.score - score == 0){
             player.score -= score
+            text = player.name + " managed to get a zero score by finishing with a double. He Won !"
+            game.is_finished = true
+        }
 
-            if ((player.score - score) %2 == 0 ) {
-                player.score -= score
-                text = player.name + " a un total de " + player.score + " point"
-
+        else if (player.score - score > 1) {
+            player.score -= score
+            text = player.name + " now has " + player.score + " points"
+        }
+        else if  (player.score - score == 0) {
+            text = player.name + " managed to get a zero score but not ending with a double. So he still has a score of " + player.score + " points"
 
         }
-        
         else {
-            text = player.name + " a raté la case " + player.target + ", il doit retenter !"
+            text = player.name + " scored too high. So he still has a score of  " + player.score 
 
         }
+
+
         player.nb_shoot -= 1
         console.log(player.nb_shoot)
         return text

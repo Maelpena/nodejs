@@ -20,15 +20,15 @@ class Around_the_world extends Game {
 
         if (score == player.target ) {
             player.set_target(player._target + 1)
-            text = player.name + " vient de deverouiller la cazzzse " + player._target + " !"
+            text = player.name + " unlock the case number " + player._target + " !"
             if (score == 20){
-                game.is_finiched = true
-                text = player.name + " a gagné, il a atteint la case 20 !"
+                game.is_finished = true
+                text = player.name + " win !"
             }
 
         }
         else {
-            text = player.name + " a raté la case " + player.target + ", il doit retenter !"
+            text = player.name + " miss the case number " + player.target + ", may be next turn !"
 
         }
         player.set_nb_shoot(player.get_nb_shoot() - 1)
