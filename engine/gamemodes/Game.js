@@ -1,8 +1,3 @@
-
-//mode de jeux + un tableau d'instance joueur + 2 status (draft pas tres inmportant)  + un current player
-
-
-
 class Game {
     constructor(players) {
         //this.mode = gamemode
@@ -19,15 +14,3 @@ class Game {
 }
 
 module.exports = Game
-/*
-{
-    id: number | string,
-    mode: 'around-the-world' | '301' | 'cricket',
-    name: string,
-    currentPlayerId: null | string | number,
-    status: 'draft' | 'started' | 'ended',
-    createdAt: datetime,
-   }
-
-
-   */
