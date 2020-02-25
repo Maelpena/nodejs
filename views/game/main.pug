@@ -1,0 +1,43 @@
+doctype html
+html(lang='fr')
+  head
+  body  
+    h2 Games
+    
+    form(action=`/games/new`, method='GET')
+      input(type='submit', value='Create game')
+
+    br
+
+    table(border="1")
+      tr
+        th Id
+        th Name
+        th Mode
+        th Status
+        th Current Player Id
+        th Show
+        th Edit
+        th Delete
+
+      each val in game    
+        tr 
+          td #{val.id}
+          td #{val.name}
+          td #{val.mode}
+          td #{val.status}
+          td #{val.currentPlayerId}
+          td 
+            form(action=`/games/${val.id}`, method='GET')
+              input(type='submit', value="See more..")
+          td 
+            form(action=`/games/${val.id}/edit`, method='GET')
+              input(type='submit', value='Edit')
+          td 
+            form(action=`/games/${val.id}?_override=DELETE`, method='POST')
+              input(type='submit', value='Delete')
+
+  br
+
+  form(action=`/players`, method='GET')
+    input(type='submit', value='Players')

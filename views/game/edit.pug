@@ -1,0 +1,35 @@
+doctype html
+html(lang='fr')
+    head
+    body
+  
+  
+        p GAME n°#{game.id}
+        p Edit the Game
+
+            form(action=`/games/${game.id}?_override=PATCH`, method='POST')
+                label Change the name :
+                input(type='text', name='name', value=game.name)
+
+                br
+
+                label which game mode :
+                select(name='mode', size='1', value=game.mode)
+                    option Around the world
+                    option 301
+                    option Cricket
+
+                br
+
+                label Which status :
+                select(name='status', size='1', value=game.status)
+                    option draft
+                    option started
+                    option ended
+
+                br
+
+                input(type='submit', value='Submit !')
+
+            form(action=`/games/${game.id}`, method='GET')
+                input(type='submit', value='Come back')

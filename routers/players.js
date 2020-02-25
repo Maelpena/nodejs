@@ -1,13 +1,15 @@
 const router = require('express').Router()
 const Player = require("../models/player.js")
 
+const override = require('method-override');
+router.use(override('_override'))
 
 
 
 // GET /players
 
 
-router.get('/players', (req, res, next) => {
+router.get('/', (req, res, next) => {
     
   Player.findAll().then((players) => {
       let limit = parseInt(req.query.limit) || 10
@@ -26,7 +28,7 @@ router.get('/players', (req, res, next) => {
               reverse: reverse, 
           })},
 
-          json: function() { res.json(Player) } 
+          json: function() { res.json(players) } 
           
           })
       })  
@@ -40,13 +42,13 @@ router.get('/players', (req, res, next) => {
 
 
 // POST /players
-router.post('/players', (req, res, next) => {
-  Player.create({name: req.query.name, email: req.query.email}).then(() => {
+router.post('/', (req, res, next) => {
+  Player.create({name: req.body.name, email: req.body.email}).then((player) => {
     res.format ({
 
-      html: res.redirect('/players'),
+      html: function() {res.redirect(`/players/${player.id}`)},
 
-      json: res.json(201)
+      json: function() {res.json(player)}
       
     })
   })
@@ -56,12 +58,12 @@ router.post('/players', (req, res, next) => {
 
 // GET /players/new
 
-router.get('/players/new', (req, res, next) => {
+router.get('/new', (req, res, next) => {
     res.format ({
 
-      html: res.render('./player/new'),
+      html: function() {res.render('./player/new')},
 
-      json: res.json("406 NOT_API_AVAILABLE")
+      json: function() {res.json("406 NOT_API_AVAILABLE")}
       
     })
 
@@ -69,15 +71,13 @@ router.get('/players/new', (req, res, next) => {
 
 // GET /players/{id}
 
-router.get('/players/playerId', (req, res, next) => {
+router.get('/:playerId', (req, res, next) => {
   Player.findOne({where: {id: req.params.playerId}}).then((player) => {
     res.format ({
 
-      html: res.render('./player/show', {
-        player: player
-      }),
+      html: function() {res.redirect(`/players/${player.id}/edit`)},
 
-      json: res.json(player)
+      json: function() {res.json(player)}
       
     })
   })
@@ -87,16 +87,17 @@ router.get('/players/playerId', (req, res, next) => {
 
 //GET /players/{id}/edit
 
-router.get('/players/playerId', (req, res, next) => {
+router.get('/:playerId/edit', (req, res, next) => {
   Player.findOne({where: {id: req.params.playerId}}).then((player) => {
 
     res.format ({
 
-      html: res.render('./player/edit', {
+      html: function() {res.render('./player/edit', {
         player: player
-      }),
+        }
+      )},
 
-      json: res.json("406 NOT_API_AVAILABLE")
+      json: function() {res.json("406 NOT_API_AVAILABLE")}
       
     })
   })
@@ -107,31 +108,29 @@ router.get('/players/playerId', (req, res, next) => {
 // PATCH /players/{id}
 
 
-router.patch('/players/playerId', (req, res, next) => {
-  Player.findOne({where: {id: req.params.playerId}}).then((player) => {
-    player.update({name: req.query.name, email: req.query.email}).then((play) => {
+router.patch('/:playerId', async (req, res, next) => {
+    await Player.update({name: req.body.name, email: req.body.email},{where: {id: req.params.playerId}}).then((play) => {
       res.format ({
 
-        html: res.redirect('/players', {
-          play: play
-        }),
+        html: function() {res.redirect(`/players`)},
   
-        json: res.json(200, play)
+        json: function() {res.json(200, play)}
         
       })
     })
-  })
 })
+
 
 // DELETE /players/{id}
 
-router.delete('/players/{id}', (req, res, next) => {
-  Player.delete({where: {id: req.params.playerId}}).then(() => {
+router.delete('/:playerId', (req, res, next) => {
+  Player.destroy({where: {id: req.params.playerId}}).then(() => {
+    console.log('delete le bail ')
     res.format ({
 
-      html: res.redirect('/players'),
+      html: function() {res.redirect('/players')},
 
-      json: res.json("406 NOT_API_AVAILABLE")
+      json: function() { res.json(204)}
       
     })
   })

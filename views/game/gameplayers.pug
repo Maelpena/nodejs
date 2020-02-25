@@ -1,0 +1,67 @@
+doctype html
+html(lang='fr')
+  head
+  body  
+    h2 GamePlayers for Game n°#{gameId}
+    table(border="1")
+        tr
+            th Player
+            th GameId
+            th Remaining shots
+            th Score
+            th Rank 
+            th Order
+
+        each val in gameplayers
+            tr
+                td #{val.playerId}
+                td #{val.gameId}
+                td #{val.remainingShots}
+                td #{val.score}
+                td #{val.rank}
+                td #{val.order}
+                td 
+                  form(action=`/games/1/players?playerId=${parseInt(val.playerId)}&_override=DELETE`, method='POST')
+                      input(type='submit', value='Delete')
+
+           
+
+    h2 Choose players              
+
+    form(action=`/games/${gameId}/players`, method='POST')
+      table(border="1")
+        tr
+          th Id
+          th Name
+          th Game Win
+          th Game Lost
+          th Play this game
+          
+        each val in players
+          tr
+            td #{val.id} 
+            td #{val.name} 
+            td #{val.gameWin} 
+            td #{val.gameLost} 
+            td(style="text-align: center;")
+              input(
+                type='checkbox'
+                name='players[]'
+                value=val.id
+                checked
+              )
+      
+        tr
+          td      
+          td      
+          td      
+          td      
+          td(style="text-align: center;")
+            input(type='submit', value='Confirm')
+
+
+    br
+    a(href="#")
+      button(type="button" id="start" style="width: 150px; height: 50px;") LAUNCH GAME !
+
+

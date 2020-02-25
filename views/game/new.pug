@@ -1,0 +1,24 @@
+doctype html
+html(lang='fr')
+  head
+  body
+   
+
+          form(action='/games', method='POST')
+            label Write the name of your new game :
+            input(type='text', name='name')
+
+            br
+
+            labelWhich game mode :
+            select(name='mode', size='1')
+              option Around the world
+              option 301
+              option Cricket
+              
+
+
+            input(type='submit', value='Submit !')
+
+            form(action='/games', method='GET')
+              input(type='submit', value='Come back')

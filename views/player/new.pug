@@ -1,0 +1,28 @@
+doctype html
+html(lang='fr')
+  head
+  body
+   
+    h2 Create new player
+
+    form(action='/players', method='POST')
+
+      label Write the name of the new player :
+      br
+      input(type='text', name='name')
+
+      br
+      
+      label Write the email of the new player :
+      br
+      input(type='text', name='email')
+      br
+      
+      br
+      input(type='submit', value='Submit !')
+
+      br
+      br
+
+    form(action='/players', method='GET')
+      input(type='submit', value='Come back')

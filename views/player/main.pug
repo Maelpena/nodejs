@@ -1,0 +1,39 @@
+doctype html
+html(lang='fr')
+  head
+  body  
+    h2 Players
+
+    form(action=`/players/new`, method='GET')
+      input(type='submit', value='Create player')
+    
+    br
+
+    table(border="1")
+      tr
+        th Id
+        th Name
+        th Email
+        th Game Win
+        th Game Lost
+        th Edit
+        th Delete
+
+      each val in players
+        tr
+          td #{val.id}
+          td #{val.name}
+          td #{val.email}
+          td #{val.gameWin}
+          td #{val.gameLost}
+          td 
+            form(action=`/players/${val.id}/edit`, method='GET')
+              input(type='submit', value='Edit')
+          td            
+            form(action=`/players/${val.id}?_override=DELETE`, method='POST')
+              input(type='submit', value='Delete')
+
+  br
+
+  form(action=`/games`, method='GET')
+    input(type='submit', value='Games')

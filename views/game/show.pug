@@ -1,0 +1,85 @@
+doctype html
+html(lang='fr')
+  head
+  body
+    h2 Game n°#{game.id}   
+    p (#{game.status})
+    table(border="1")
+      tr
+        th Game 
+        th Name 
+        th Current player id 
+        th Mode 
+        th Status 
+        th Edit 
+      tr
+        td #{game.id}
+        td #{game.name}
+        td #{game.currentPlayerId}
+        td #{game.mode}
+        td #{game.status}
+        td
+          form(action=`/games/${game.id}/edit`, method='GET')
+              input(type='submit', value='Edit')
+
+    br 
+    
+   
+
+    p Players in this game :
+    table(border="1")
+      tr
+        th Rank 
+        th Id 
+        th Remaining Shots 
+        th Score
+          
+      each val in players
+        tr          
+          td #{val.rank}
+          td #{val.playerId}  
+          td #{val.remainingShots} 
+          td #{val.score} 
+
+    if game.status == "draft"
+          form(action=`/games/${game.id}/players`, method='GET')
+            input(type='submit', value='Game players')
+    
+
+      
+    if currentplayer
+      p c'est au tour de #{currentplayer.id} 
+      p il lui reste #{currentplayer.remainingShots}
+    p Last shots of this game :
+    table(border="1")
+      tr
+        th Player Id
+        th Sector
+        th Multiplicator
+        
+          
+      each val in shots
+        tr
+          td #{val.playerId}  
+          td #{val.sector} 
+          td #{val.multiplicator} 
+    br
+    form(action=`/games/${game.id}/shots`, method='POST')
+      label Sector :
+      br
+      input(type='text', name='sector')
+      br
+      label Multiplicator :
+      br
+      input(type='text', name='multiplicator')
+      br
+
+      input(type='submit', value='Valider')
+
+    form(action=`/games/${game.id}/shots?sector=0&multiplicator=0`, method='POST')
+      input(name="multiplicator" type="hidden" value="0")
+      input(name="sector" type="hidden" value="0")
+      input(type='submit', value='Cible raté')
+
+        
+            

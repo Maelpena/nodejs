@@ -1,5 +1,8 @@
 const {Sequelize, Model} = require("sequelize")
-var sequelize = new Sequelize('mysql://root:@localhost:3306/dart', {})
+var sequelize = new Sequelize('dart', 'user', 'root', {
+  host: 'localhost',
+  dialect: 'mysql'
+})
 
 class Player extends Model {}
 Player.init({
@@ -10,10 +13,12 @@ Player.init({
       type: Sequelize.STRING
     },
     gameWin:{
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
+      defaultValue: 0
     },
     gameLost: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
+      defaultValue: 0
     },
     createdAt: {
       type: Sequelize.DATE

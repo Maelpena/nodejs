@@ -1,0 +1,24 @@
+doctype html
+html(lang='fr')
+    head
+    body
+  
+  
+        p Player n°#{player.id}
+        p Edit the Player
+
+            form(action=`/players/${player.id}?_override=PATCH`, method='POST')
+                label Change the name :
+                input(type='text', name='name', value=player.name)
+
+                br
+                
+                label Write the email of the new player :
+                input(type='text', name='email', value=player.email)
+                
+
+                input(type='submit', value='Submit !')
+
+
+            form(action=`/players`, method='GET')
+                input(type='submit', value='Come back')
