@@ -138,27 +138,32 @@ router.patch('/:gameId', async (req, res, next) => {
     console.log('je suis dans le patch', req.body)
     await Game.update({name: req.body.name, mode: req.body.mode, status: req.body.status }, {where: {id: req.params.gameId}}).then((game) => {
         if (req.body.status == "started"){
-            if (req.body.mode == "301"){
-                GamePlayer.update({score: 301, remainingShots: 3}, {where: {gameId: req.params.gameId}}).then(() => {
-                    GamePlayer.findAll({where: {gameId: req.params.gameId}}).then((players) => {
-                        let rank = 0
-                        players.forEach(  player => {
-                            console.log("")
-                            console.log("je suis dans la boucle")
-                            console.log(rank)
-                            GamePlayer.update({rank: rank},{where: {playerId: player.playerId, gameId: player.gameId}}).then(() => {})
-                            rank = rank + 1
-                        })
-                        
-                    console.log("gamesplayers updated tot 301")
-                        var current = players[1]
-                        var cur = current.playerId
 
-                        Game.update({currentPlayerId: cur}, {where: {id: req.params.gameId}}).then(() => {
-
-                        })
-                    })
+            GamePlayer.findAll({where: {gameId: req.params.gameId}}).then((players) => {
+                let rank = 0
+                players.forEach(  player => {
+                    console.log("")
+                    console.log("je suis dans la boucle")
+                    console.log(rank)
+                    GamePlayer.update({rank: rank},{where: {playerId: player.playerId, gameId: player.gameId}}).then(() => {})
+                    rank = rank + 1
                 })
+                
+            console.log("gamesplayers updated tot 301")
+                var current = players[1]
+                var cur = current.playerId
+
+                Game.update({currentPlayerId: cur}, {where: {id: req.params.gameId}}).then(() => {
+
+                })
+            })
+
+            if (req.body.mode == "301"){
+                GamePlayer.update({score: 301, remainingShots: 3}, {where: {gameId: req.params.gameId}}).then(() => { })
+            }
+            else if (req.body.mode == "Around the world"){
+                GamePlayer.update({score: 0, remainingShots: 3}, {where: {gameId: req.params.gameId}}).then(() => { })
+
             }
         }
         
@@ -283,20 +288,27 @@ router.post('/:gameId/shots', (req, res, next) => {
 
                     }
 
-                    let shotscore = shot.sector * shot.multiplicator
-
                     
-
-                    let newscore = gameplayer.score - shotscore
-                    console.log(" ")
-                    console.log("newscore", newscore, "lastscore :" ,gameplayer.score)
-                    console.log(" ")
                     switch (game.mode) {
                         case "Around the world":
+                            if (shot.sector == gameplayer.score + 1 ) {
+                                let target = parseInt(shot.sector) 
+                                console.log("valeur du newshot :", target)
+                                GamePlayer.update({score: target},{where: {playerId: game.currentPlayerId}}).then(() => {  })
 
-                            console.log("around the world")
+                                //text = player.name + " unlock the case number " + player._target + " !"
+                                if (gameplayer.score == 20){
+                                    Game.update({status: "ended"},{where: {id: game.id}}).then(() => {  })
+
+                                    //text = player.name + " win !"
+                                }
+
+                            }
+   
+
                         case "301":
-
+                            let shotscore = shot.sector * shot.multiplicator
+                            let newscore = gameplayer.score - shotscore
                             
                             if (shot.multiplicator == 2 && newscore == 0){
                                 GamePlayer.update({score: newscore },{where: {playerId: game.currentPlayerId}}).then(() => {  })
@@ -334,32 +346,5 @@ router.post('/:gameId/shots', (req, res, next) => {
     })
 })
 
-
-// DELETE /games/{id}/shots/previous
-
-router.delete('/:gameId/shots/previous', (req, res, next) => {
-    GameShot.delete({})
-    res.format ({
-
-      html: function() { res.render('./main') },
-
-      json: function() { res.json("406 NOT_API_AVAILABLE") }
-      
-    })
-
-})
-
-// GET /*
-
-router.get('/jbad', (req, res, next) => {
-    res.format ({
-
-      html: function() { res.render('./main') },
-
-      json: function() { res.json("406 NOT_API_AVAILABLE") }
-      
-    })
-
-})
 
 module.exports = router

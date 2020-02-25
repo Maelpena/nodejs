@@ -47,9 +47,29 @@ html(lang='fr')
     
 
       
-    if currentplayer
+    if currentplayer && game.status == "started"
       p c'est au tour de #{currentplayer.id} 
       p il lui reste #{currentplayer.remainingShots}
+
+      form(action=`/games/${game.id}/shots`, method='POST')
+        label Sector :
+        br
+        input(type='text', name='sector')
+        br
+        label Multiplicator :
+        br
+        input(type='text', name='multiplicator')
+        br
+
+        input(type='submit', value='Valider')
+
+      form(action=`/games/${game.id}/shots?sector=0&multiplicator=0`, method='POST')
+        input(name="multiplicator" type="hidden" value="0")
+        input(name="sector" type="hidden" value="0")
+        input(type='submit', value='Cible raté')
+
+        
+            
     p Last shots of this game :
     table(border="1")
       tr
@@ -64,22 +84,4 @@ html(lang='fr')
           td #{val.sector} 
           td #{val.multiplicator} 
     br
-    form(action=`/games/${game.id}/shots`, method='POST')
-      label Sector :
-      br
-      input(type='text', name='sector')
-      br
-      label Multiplicator :
-      br
-      input(type='text', name='multiplicator')
-      br
 
-      input(type='submit', value='Valider')
-
-    form(action=`/games/${game.id}/shots?sector=0&multiplicator=0`, method='POST')
-      input(name="multiplicator" type="hidden" value="0")
-      input(name="sector" type="hidden" value="0")
-      input(type='submit', value='Cible raté')
-
-        
-            
