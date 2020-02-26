@@ -23,21 +23,22 @@ html(lang='fr')
               input(type='submit', value='Edit')
 
     br 
-    
-   
-
-    p Players in this game :
+    p GamePlayers in this game :
     table(border="1")
       tr
         th Rank 
         th Id 
+        th name
         th Remaining Shots 
         th Score
           
-      each val in players
+      each val in gameplayers
         tr          
           td #{val.rank}
-          td #{val.playerId}  
+          td #{val.playerId}
+          each player in players
+            if player.id == val.playerId
+              td #{player.name}
           td #{val.remainingShots} 
           td #{val.score} 
 
@@ -45,11 +46,12 @@ html(lang='fr')
           form(action=`/games/${game.id}/players`, method='GET')
             input(type='submit', value='Game players')
     
-
       
     if currentplayer && game.status == "started"
-      p c'est au tour de #{currentplayer.id} 
       p il lui reste #{currentplayer.remainingShots}
+      each player in players
+        if player.id == currentplayer.playerId
+          p c'est au tour de #{player.name}
 
       form(action=`/games/${game.id}/shots`, method='POST')
         label Sector :
@@ -57,8 +59,11 @@ html(lang='fr')
         input(type='text', name='sector')
         br
         label Multiplicator :
-        br
-        input(type='text', name='multiplicator')
+        select(name='multiplicator', size='1')
+          option 1
+          option 2
+          option 3
+
         br
 
         input(type='submit', value='Valider')
